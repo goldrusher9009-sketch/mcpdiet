@@ -1,0 +1,4 @@
+{ "mcpServers": {
+  "leaky": { "command": "npx", "args": ["-y", "some-server", "--key", "sk-abcdefghijklmnopqrstuvwxyz123456"] },
+  "cloud": { "url": "http://example.com/mcp" }
+} }

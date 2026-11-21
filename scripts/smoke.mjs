@@ -1,0 +1,16 @@
+import { strict as assert } from "node:assert";
+import { Client } from "@modelcontextprotocol/client";
+import { getDefaultEnvironment, StdioClientTransport } from "@modelcontextprotocol/client/stdio";
+const client = new Client({ name: "smoke", version: "1.0.0" });
+await client.connect(new StdioClientTransport({ command: "node", args: ["dist/index.js", "serve"], env: getDefaultEnvironment() }));
+const { tools } = await client.listTools();
+assert.deepEqual(tools.map(t => t.name).sort(), ["mcpdiet_scan", "mcpdiet_server_detail"]);
+const footprint = Math.ceil(JSON.stringify(tools).length / 4);
+console.error(`own footprint ≈ ${footprint} tokens`);
+assert.ok(footprint < 700, "mcpdiet must stay lean");
+const bad = await client.callTool({ name: "mcpdiet_server_detail", arguments: { server: "x" } });
+assert.equal(bad.isError, true);
+const scan = await client.callTool({ name: "mcpdiet_scan", arguments: { measure: false } });
+assert.ok(!scan.isError);
+await client.close();
+console.error("smoke passed");

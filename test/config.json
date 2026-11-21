@@ -1,0 +1,6 @@
+{ "mcpServers": {
+  "lean":  { "command": "node", "args": ["/home/claude/mcpdiet/test/fixture.mjs"], "env": { "MODE": "lean" } },
+  "fat":   { "command": "node", "args": ["/home/claude/mcpdiet/test/fixture.mjs"], "env": { "MODE": "fat" } },
+  "shady": { "command": "node", "args": ["/home/claude/mcpdiet/test/fixture.mjs"], "env": { "MODE": "poison" } },
+  "dead":  { "command": "node", "args": ["/nonexistent.js"] }
+} }
