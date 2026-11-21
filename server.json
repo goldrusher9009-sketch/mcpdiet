@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "name": "io.github.goldrusher9009-sketch/mcpdiet",
+  "description": "Weigh your MCP servers: token cost, dead servers, risky configs, with a ranked fix list.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/goldrusher9009-sketch/mcpdiet",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "mcpdiet",
+      "version": "0.1.0",
+      "runtimeArguments": [
+        {
+          "type": "positional",
+          "value": "serve"
+        }
+      ],
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

@@ -1,17 +1,35 @@
 {
   "name": "mcpdiet",
   "version": "0.1.0",
-  "description": "Weigh your MCP servers. Find the token bloat, dead servers and risky configs eating your context window — then fix it. CLI + MCP server.",
+  "description": "Weigh your MCP servers. Find the token bloat, dead servers and risky configs eating your context window \u2014 then fix it. CLI + MCP server.",
   "type": "module",
-  "bin": { "mcpdiet": "dist/index.js" },
-  "files": ["dist", "README.md", "LICENSE"],
+  "bin": {
+    "mcpdiet": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "smoke": "node scripts/smoke.mjs"
   },
-  "engines": { "node": ">=20.3" },
-  "keywords": ["mcp", "model-context-protocol", "claude", "token", "context-window", "audit", "cursor", "claude-code", "tool-bloat"],
+  "engines": {
+    "node": ">=20.3"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "token",
+    "context-window",
+    "audit",
+    "cursor",
+    "claude-code",
+    "tool-bloat"
+  ],
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/client": "^2.3.1",
@@ -21,5 +39,14 @@
   "devDependencies": {
     "@types/node": "^24.0.0",
     "typescript": "^5.9.3"
+  },
+  "mcpName": "io.github.goldrusher9009-sketch/mcpdiet",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goldrusher9009-sketch/mcpdiet.git"
+  },
+  "homepage": "https://github.com/goldrusher9009-sketch/mcpdiet#readme",
+  "bugs": {
+    "url": "https://github.com/goldrusher9009-sketch/mcpdiet/issues"
   }
 }
