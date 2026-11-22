@@ -1,0 +1,1 @@
+{"paths":{"/pets":{"get":{"summary":"List pets","parameters":[{"name":"limit"}]}}}}

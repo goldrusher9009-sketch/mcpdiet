@@ -1,0 +1,13 @@
+{
+  "name": "mcp-pack",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "tsc", "test": "node scripts/test.mjs" },
+  "dependencies": {
+    "@modelcontextprotocol/server": "latest",
+    "@modelcontextprotocol/client": "latest",
+    "zod": "^4"
+  },
+  "devDependencies": { "typescript": "^5", "@types/node": "^22" }
+}
