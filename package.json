@@ -14,7 +14,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "prepare": "tsc"
   },
   "engines": {
     "node": ">=20.3"
