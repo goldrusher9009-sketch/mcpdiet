@@ -6,7 +6,7 @@
 npx github:goldrusher9009-sketch/mcpdiet
 ```
 
-(`npx mcpdiet` once it's on npm.)
+Or from npm: `npx @hashshabbir/mcpdiet`
 
 One command finds every MCP server in Claude Desktop, Claude Code, Cursor, VS Code and Windsurf, starts each one exactly like your client does, and tells you:
 
@@ -35,7 +35,7 @@ Every MCP server dumps its full tool list into the model's context on every sess
 mcpdiet is also an MCP server — and it practices what it preaches (2 tools, <700 tokens).
 
 ```json
-{ "mcpServers": { "mcpdiet": { "command": "npx", "args": ["-y", "github:goldrusher9009-sketch/mcpdiet", "serve"] } } }
+{ "mcpServers": { "mcpdiet": { "command": "npx", "args": ["-y", "@hashshabbir/mcpdiet", "serve"] } } }
 ```
 
 Then ask: *"Audit my MCP setup and tell me what to cut."*

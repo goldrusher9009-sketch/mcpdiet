@@ -1,5 +1,5 @@
 {
-  "name": "mcpdiet",
+  "name": "@hashshabbir/mcpdiet",
   "version": "0.2.0",
   "description": "Weigh your MCP servers. Find the token bloat, dead servers and risky configs eating your context window \u2014 then fix it. CLI + MCP server.",
   "type": "module",

@@ -10,7 +10,7 @@
   "packages": [
     {
       "registryType": "npm",
-      "identifier": "mcpdiet",
+      "identifier": "@hashshabbir/mcpdiet",
       "version": "0.2.0",
       "runtimeArguments": [
         {
