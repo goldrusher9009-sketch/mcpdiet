@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { Client } from "@modelcontextprotocol/client";
 import { getDefaultEnvironment, StdioClientTransport } from "@modelcontextprotocol/client/stdio";
 import type { ServerEntry } from "./configs.js";
@@ -7,6 +8,7 @@ export interface MeasuredTool {
   description: string;
   schemaChars: number;
   tokens: number;
+  hash: string;
 }
 
 export interface Measurement {
@@ -56,7 +58,8 @@ export async function measureServer(entry: ServerEntry, timeoutMs: number): Prom
           name: t.name,
           description: t.description ?? "",
           schemaChars: payload.length,
-          tokens: estimateTokens(payload.length)
+          tokens: estimateTokens(payload.length),
+          hash: createHash("sha256").update(payload).digest("hex").slice(0, 16)
         });
       }
       cursor = page.nextCursor;

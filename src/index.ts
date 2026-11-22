@@ -4,9 +4,10 @@ import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import * as z from "zod/v4";
 import { analyze, type Report } from "./analyze.js";
 import { discoverServers } from "./configs.js";
+import { diffBaseline, saveBaseline } from "./baseline.js";
 import { renderMarkdown, renderTerminal } from "./report.js";
 
-const VERSION = "0.1.0";
+const VERSION = "0.2.0";
 const argv = process.argv.slice(2);
 const flag = (f: string) => argv.includes(f);
 const opt = (f: string) => {
@@ -27,6 +28,11 @@ Options:
   --timeout <sec>   per-server startup limit (default 20)
   --json | --md     machine / markdown output
   --no-color        plain output
+
+CI / team:
+  --budget <tokens>         exit 1 if total tool tokens exceed this (gate your builds)
+  --save-baseline <file>    record every tool's fingerprint
+  --check-baseline <file>   exit 1 if a trusted tool changed (rug-pull / silent update alert)
 
 Scanning starts the stdio servers in your config exactly as your client would, lists their tools, then stops them.
 Nothing leaves your machine. Env values are never printed.`;
@@ -87,7 +93,27 @@ async function main() {
   if (flag("--json")) console.log(JSON.stringify(report, null, 2));
   else if (flag("--md")) console.log(renderMarkdown(report));
   else console.log(renderTerminal(report));
-  process.exit(report.grade === "F" || report.findings.some(f => f.severity === "high") ? 1 : 0);
+  let fail = false;
+  const budget = Number(opt("--budget") ?? 0);
+  if (budget && report.totalTokens > budget) {
+    console.error(`✗ Over budget: ${report.totalTokens.toLocaleString()} > ${budget.toLocaleString()} tokens`);
+    fail = true;
+  }
+  const saveTo = opt("--save-baseline");
+  if (saveTo) {
+    saveBaseline(report, saveTo);
+    console.error(`Baseline saved to ${saveTo}`);
+  }
+  const checkFrom = opt("--check-baseline");
+  if (checkFrom) {
+    const d = diffBaseline(report, checkFrom);
+    for (const x of d.changed) console.error(`✗ CHANGED since baseline: ${x}`);
+    for (const x of d.added) console.error(`+ new tool: ${x}`);
+    for (const x of d.removed) console.error(`- removed: ${x}`);
+    if (d.changed.length) fail = true;
+    else console.error("✓ No trusted tool changed since baseline");
+  }
+  process.exit(fail || report.grade === "F" || report.findings.some(f => f.severity === "high") ? 1 : 0);
 }
 
 main().catch(e => {

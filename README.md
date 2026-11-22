@@ -59,3 +59,26 @@ Exit code is `1` on grade F or any high-severity finding, so you can gate CI.
 - Nothing leaves your machine; env values are never printed.
 
 MIT licensed.
+
+## CI & teams
+
+Stop bloat and silent tool swaps before they ship:
+
+```bash
+npx github:goldrusher9009-sketch/mcpdiet --budget 12000                  # fail the build over 12K tokens
+npx github:goldrusher9009-sketch/mcpdiet --save-baseline mcp.lock.json   # fingerprint every tool
+npx github:goldrusher9009-sketch/mcpdiet --check-baseline mcp.lock.json  # fail if a trusted tool changed (rug-pull alert)
+```
+
+```yaml
+# .github/workflows/mcpdiet.yml
+on: [pull_request]
+jobs:
+  mcpdiet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npx -y github:goldrusher9009-sketch/mcpdiet --config .mcp.json --budget 12000 --check-baseline mcp.lock.json
+```
+
+Need audits for your company's MCP setup or a custom connector? Open an issue.
