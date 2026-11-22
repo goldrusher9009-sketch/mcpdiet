@@ -15,6 +15,12 @@ const cases = [
   ["prompt-lint", { prompt: "Write some good stuff" }, /Vague word/],
   ["tz-planner", { zones: ["America/New_York","Europe/London"], date: "2026-11-23" }, /UTC/],
   ["bid-total", { direct_costs: [41233.17, 18877.42] }, /786\.00/],
+  ["gitstory", { path: "..", days: 365 }, /commits in/],
+  ["readme-score", { path: "README.md" }, /Score: \d+\/10/],
+  ["json-diff", { a: "t/api.json", b: "t/api.json" }, /identical/],
+  ["margin-calc", { cost: 100, margin_pct: 20 }, /Price: \$125\.00/],
+  ["env-diff", { env: "t/.env", example: "t/.env.example" }, /Missing from/],
+  ["framing", { length_ft: 20, openings: 1 }, /Studs/],
 ];
 let fail = 0;
 for (const [n, args, re] of cases) {

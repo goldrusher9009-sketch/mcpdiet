@@ -1,13 +1,52 @@
 {
-  "name": "mcp-pack",
+  "name": "@hashshabbir/mcp-pack",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
-  "scripts": { "build": "tsc", "test": "node scripts/test.mjs" },
+  "scripts": {
+    "build": "tsc",
+    "test": "node scripts/test.mjs",
+    "prepublishOnly": "npm run build && npm test"
+  },
   "dependencies": {
     "@modelcontextprotocol/server": "latest",
     "@modelcontextprotocol/client": "latest",
     "zod": "^4"
   },
-  "devDependencies": { "typescript": "^5", "@types/node": "^22" }
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^22"
+  },
+  "description": "20 small keyless MCP connectors for developers and contractors. CLI or stdio MCP server.",
+  "license": "MIT",
+  "files": [
+    "dist/shared",
+    "dist/src",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "bid-total": "dist/src/bid-total.js",
+    "cronwise": "dist/src/cronwise.js",
+    "csv-profile": "dist/src/csv-profile.js",
+    "dockerfile-doctor": "dist/src/dockerfile-doctor.js",
+    "env-diff": "dist/src/env-diff.js",
+    "envguard": "dist/src/envguard.js",
+    "framing": "dist/src/framing.js",
+    "gha-doctor": "dist/src/gha-doctor.js",
+    "gitstory": "dist/src/gitstory.js",
+    "json-diff": "dist/src/json-diff.js",
+    "license-check": "dist/src/license-check.js",
+    "log-triage": "dist/src/log-triage.js",
+    "margin-calc": "dist/src/margin-calc.js",
+    "openapi-slim": "dist/src/openapi-slim.js",
+    "prompt-lint": "dist/src/prompt-lint.js",
+    "readme-score": "dist/src/readme-score.js",
+    "regex-lab": "dist/src/regex-lab.js",
+    "repo-weigh": "dist/src/repo-weigh.js",
+    "takeoff": "dist/src/takeoff.js",
+    "tz-planner": "dist/src/tz-planner.js"
+  }
 }
