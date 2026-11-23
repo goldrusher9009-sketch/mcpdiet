@@ -12,7 +12,7 @@ const CODE_RULES: [RegExp, Finding][] = [
   [/\b(eval\s*\(|new Function\s*\()/, { sev: "high", cost: 15, msg: "Runs dynamic code (eval / new Function)" }],
   [/(\.ssh|\.aws\/credentials|id_rsa|\.npmrc|\.netrc|\.gnupg|Login Data|\.config\/gcloud)/, { sev: "high", cost: 20, msg: "References credential or key files" }],
   [/JSON\.stringify\(\s*process\.env\s*\)|Object\.(entries|keys|values)\(\s*process\.env\s*\)/, { sev: "high", cost: 20, msg: "Reads all environment variables at once" }],
-  [/https?:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/, { sev: "medium", cost: 10, msg: "Contacts a hard-coded IP address" }],
+  [/https?:\/\/(?!127\.|0\.0\.0\.0|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/, { sev: "medium", cost: 10, msg: "Contacts a hard-coded IP address" }],
   [/child_process/, { sev: "medium", cost: 8, msg: "Can run shell commands (child_process)" }],
   [/(atob|Buffer\.from)\([^)]{20,}\)[\s\S]{0,80}(eval|Function|exec)/, { sev: "high", cost: 15, msg: "Decodes hidden data then executes it" }],
   [/(pastebin\.com|webhook\.site|ngrok\.io|requestbin|discord(app)?\.com\/api\/webhooks)/i, { sev: "high", cost: 20, msg: "Sends data to a paste or webhook site" }],
@@ -43,7 +43,7 @@ function inspect(dir: string, meta: any, fromRegistry: boolean) {
   }
   let net = false; const seen = new Set<string>();
   for (const file of walk(dir)) {
-    if (!/\.(m?js|cjs|ts|json)$/.test(file) || /node_modules/.test(file)) continue;
+    if (!/\.(m?js|cjs|ts|json)$/.test(file) || /node_modules|(^|[\/])(tests?|__tests__|scripts|examples?|docs?)[\/]|\.(test|spec)\./.test(rel(dir, file))) continue;
     const s = readText(file); if (!s) continue;
     if (NET.test(s)) net = true;
     for (const [re, fd] of CODE_RULES) if (re.test(s) && !seen.has(fd.msg)) { seen.add(fd.msg); f.push({ ...fd, msg: `${fd.msg} (${rel(dir, file)})` }); }
