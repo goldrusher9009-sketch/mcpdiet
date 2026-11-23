@@ -22,14 +22,15 @@ const cases = [
   ["env-diff", { env: "t/.env", example: "t/.env.example" }, /Missing from/],
   ["framing", { length_ft: 20, openings: 1 }, /Studs/],
   ["mcpseal", { target: "t/evil" }, /Seal: F/],
+  ["mcpseal-gate", { packages: "t/evil", min_grade: "B" }, /Pro feature/, true],
 ];
 let fail = 0;
-for (const [n, args, re] of cases) {
+for (const [n, args, re, expectErr] of cases) {
   const c = new Client({ name: "t", version: "1" });
   await c.connect(new StdioClientTransport({ command: "node", args: [`dist/src/${n}.js`, "serve"] }));
   const tools = await c.listTools();
   const r = await c.callTool({ name: tools.tools[0].name, arguments: args });
-  const text = r.content[0].text; const ok = !r.isError && re.test(text);
+  const text = r.content[0].text; const ok = (expectErr ? r.isError : !r.isError) && re.test(text);
   const tk = Math.ceil(JSON.stringify(tools.tools).length / 4);
   console.log(`${ok ? "PASS" : "FAIL"} ${n} (${tools.tools[0].name}, ~${tk} tokens)`);
   if (!ok) { fail++; console.log(text); }

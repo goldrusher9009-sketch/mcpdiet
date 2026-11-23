@@ -48,6 +48,7 @@
     "repo-weigh": "dist/src/repo-weigh.js",
     "takeoff": "dist/src/takeoff.js",
     "tz-planner": "dist/src/tz-planner.js",
-    "mcpseal": "dist/src/mcpseal.js"
+    "mcpseal": "dist/src/mcpseal.js",
+    "mcpseal-gate": "dist/src/mcpseal-gate.js"
   }
 }

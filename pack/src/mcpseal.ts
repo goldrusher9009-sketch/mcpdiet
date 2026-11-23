@@ -52,29 +52,34 @@ function inspect(dir: string, meta: any, fromRegistry: boolean) {
   return { name: pkg.name, version: pkg.version, findings: f };
 }
 
+export function checkTarget(target: string) {
+  let dir = target, meta: any = null, reg = false;
+  if (!(existsSync(target) && statSync(target).isDirectory())) {
+    if (!/^(@[a-z0-9._~-]+\/)?[a-z0-9._~-]+(@[\w.^~-]+)?$/i.test(target)) throw new Error("Give an npm package name or an existing folder.");
+    const tmp = mkdtempSync(join(tmpdir(), "mcpseal-")); reg = true;
+    try { meta = JSON.parse(execFileSync("npm", ["view", target, "--json"], { encoding: "utf8", timeout: 60000 })); } catch { throw new Error(`Could not find "${target}" on npm.`); }
+    if (Array.isArray(meta)) meta = meta[meta.length - 1];
+    const out = execFileSync("npm", ["pack", target, "--json", "--pack-destination", tmp], { encoding: "utf8", timeout: 120000 });
+    execFileSync("tar", ["-xzf", join(tmp, JSON.parse(out)[0].filename), "-C", tmp]);
+    dir = join(tmp, "package");
+  }
+  const r = inspect(dir, meta, reg);
+  const score = Math.max(0, 100 - r.findings.reduce((a, x) => a + x.cost, 0));
+  return { ...r, score, grade: grade(score) };
+}
+export { badge };
+
 const t = tool({
   name: "mcpseal_check",
   title: "Safety-check an MCP server before installing",
   description: "Grade an npm package or local folder A-F for supply-chain risk before you install it: install scripts, credential access, dynamic code, shell use, hidden network calls. Optionally write a README badge SVG.",
   schema: z.object({ target: z.string().describe("npm package name (e.g. @scope/server) or a local folder"), badge: z.string().optional().describe("Write a badge SVG to this path") }),
   run: ({ target, badge: badgePath }) => {
-    let dir = target, meta: any = null, reg = false;
-    if (!(existsSync(target) && statSync(target).isDirectory())) {
-      if (!/^(@[a-z0-9._~-]+\/)?[a-z0-9._~-]+(@[\w.^~-]+)?$/i.test(target)) throw new Error("Give an npm package name or an existing folder.");
-      const tmp = mkdtempSync(join(tmpdir(), "mcpseal-")); reg = true;
-      try { meta = JSON.parse(execFileSync("npm", ["view", target, "--json"], { encoding: "utf8", timeout: 60000 })); } catch { throw new Error(`Could not find "${target}" on npm.`); }
-      if (Array.isArray(meta)) meta = meta[meta.length - 1];
-      const out = execFileSync("npm", ["pack", target, "--json", "--pack-destination", tmp], { encoding: "utf8", timeout: 120000 });
-      const file = JSON.parse(out)[0].filename;
-      execFileSync("tar", ["-xzf", join(tmp, file), "-C", tmp]);
-      dir = join(tmp, "package");
-    }
-    const r = inspect(dir, meta, reg);
-    const score = Math.max(0, 100 - r.findings.reduce((a, x) => a + x.cost, 0)), g = grade(score);
+    const r = checkTarget(target), g = r.grade, score = r.score;
     if (badgePath) writeFileSync(badgePath, badge(g, score));
     const order = { high: 0, medium: 1, low: 2, info: 3 };
     const lines = r.findings.sort((a, b) => order[a.sev] - order[b.sev]).map((x) => `  [${x.sev.toUpperCase()}] ${x.msg}`);
     return `${r.name}@${r.version}\nSeal: ${g}  (${score}/100)\n\n${lines.length ? lines.join("\n") : "  No findings."}\n\nStatic check only. It cannot prove a package is safe. Review anything graded C or lower before installing.${badgePath ? `\n\nBadge written to ${badgePath}. Add to your README:\n![mcpseal](${badgePath})` : ""}`;
   },
 });
-main("mcpseal", "0.1.0", [t]);
+if (process.argv[1]?.endsWith("mcpseal.js")) main("mcpseal", "0.1.0", [t]);
