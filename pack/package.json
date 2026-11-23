@@ -1,6 +1,6 @@
 {
   "name": "@hashshabbir/mcp-pack",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": false,
   "type": "module",
   "scripts": {
@@ -17,7 +17,7 @@
     "typescript": "^5",
     "@types/node": "^22"
   },
-  "description": "21 small keyless MCP tools, including mcpseal: a safety grade for MCP servers before you install them.",
+  "description": "27 small keyless MCP tools incl. mcpseal, a safety grade for MCP servers.",
   "license": "MIT",
   "files": [
     "dist/shared",
@@ -49,6 +49,11 @@
     "takeoff": "dist/src/takeoff.js",
     "tz-planner": "dist/src/tz-planner.js",
     "mcpseal": "dist/src/mcpseal.js",
-    "mcpseal-gate": "dist/src/mcpseal-gate.js"
+    "mcpseal-gate": "dist/src/mcpseal-gate.js",
+    "injection-scan": "dist/src/injection-scan.js",
+    "mcp-config-audit": "dist/src/mcp-config-audit.js",
+    "llms-txt": "dist/src/llms-txt.js",
+    "changelog-gen": "dist/src/changelog-gen.js",
+    "sbom-lite": "dist/src/sbom-lite.js"
   }
 }

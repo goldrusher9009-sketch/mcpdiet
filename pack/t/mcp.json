@@ -1,0 +1,1 @@
+{"mcpServers":{"a":{"command":"npx","args":["-y","some-mcp"],"env":{"API_KEY":"abcdefghijklmnop12345"}},"b":{"url":"http://example.com/mcp"}}}
