@@ -1,6 +1,6 @@
 {
   "name": "@hashshabbir/mcp-pack",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "type": "module",
   "scripts": {
@@ -17,7 +17,7 @@
     "typescript": "^5",
     "@types/node": "^22"
   },
-  "description": "20 small keyless MCP connectors for developers and contractors. CLI or stdio MCP server.",
+  "description": "21 small keyless MCP tools, including mcpseal: a safety grade for MCP servers before you install them.",
   "license": "MIT",
   "files": [
     "dist/shared",
@@ -47,6 +47,7 @@
     "regex-lab": "dist/src/regex-lab.js",
     "repo-weigh": "dist/src/repo-weigh.js",
     "takeoff": "dist/src/takeoff.js",
-    "tz-planner": "dist/src/tz-planner.js"
+    "tz-planner": "dist/src/tz-planner.js",
+    "mcpseal": "dist/src/mcpseal.js"
   }
 }

@@ -21,8 +21,8 @@ const cases = [
   ["margin-calc", { cost: 100, margin_pct: 20 }, /Price: \$125\.00/],
   ["env-diff", { env: "t/.env", example: "t/.env.example" }, /Missing from/],
   ["framing", { length_ft: 20, openings: 1 }, /Studs/],
-];
-let fail = 0;
+  ["mcpseal", { target: "t/evil" }, /Seal: F/],
+]; = 0;
 for (const [n, args, re] of cases) {
   const c = new Client({ name: "t", version: "1" });
   await c.connect(new StdioClientTransport({ command: "node", args: [`dist/src/${n}.js`, "serve"] }));
