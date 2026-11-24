@@ -69,7 +69,7 @@ export function checkTarget(target: string) {
 }
 export { badge };
 
-const t = tool({
+export const t = tool({
   name: "mcpseal_check",
   title: "Safety-check an MCP server before installing",
   description: "Grade an npm package or local folder A-F for supply-chain risk before you install it: install scripts, credential access, dynamic code, shell use, hidden network calls. Optionally write a README badge SVG.",

@@ -2,7 +2,7 @@
 import * as z from "zod/v4";
 import { main, tool, tokens } from "../shared/runner.js";
 
-const t = tool({
+export const t = tool({
   name: "prompt_lint",
   title: "Lint an LLM prompt",
   description: "Check a prompt for vague wording, missing output format, missing role or context, contradictions and bloat. Returns fixes.",
@@ -20,4 +20,4 @@ const t = tool({
     return `~${n} tokens\n` + (f.length ? f.map((x, i) => `${i + 1}. ${x}`).join("\n") : "No issues found.");
   },
 });
-main("prompt-lint", "0.1.0", [t]);
+if (process.argv[1]?.endsWith("prompt-lint.js")) main("prompt-lint", "0.1.0", [t]);

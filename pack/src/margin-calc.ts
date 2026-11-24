@@ -2,7 +2,7 @@
 import * as z from "zod/v4";
 import { main, tool } from "../shared/runner.js";
 
-const t = tool({
+export const t = tool({
   name: "margin_calc",
   title: "Markup vs margin calculator",
   description: "Convert between markup and margin and compute the price for a target margin. Prevents the common markup/margin mix-up in bids.",
@@ -14,4 +14,4 @@ const t = tool({
     return `Cost: $${cost.toFixed(2)}\nPrice: $${price.toFixed(2)}\nProfit: $${profit.toFixed(2)}\nMargin: ${((profit / price) * 100).toFixed(2)}%\nMarkup: ${((profit / cost) * 100).toFixed(2)}%`;
   },
 });
-main("margin-calc", "0.1.0", [t]);
+if (process.argv[1]?.endsWith("margin-calc.js")) main("margin-calc", "0.1.0", [t]);

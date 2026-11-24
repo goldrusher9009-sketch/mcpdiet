@@ -27,7 +27,7 @@ export function nextRuns(expr: string, from: Date, n: number): Date[] {
   }
   return out;
 }
-const t = tool({
+export const t = tool({
   name: "cron_explain",
   title: "Explain a cron expression",
   description: "Validate a 5-field cron expression and list its next run times in UTC.",
@@ -37,4 +37,4 @@ const t = tool({
     return `Valid: ${expression}\nNext ${runs.length} runs (UTC):\n${runs.map((r) => r.toISOString().replace(".000Z", "Z")).join("\n")}`;
   },
 });
-main("cronwise", "0.1.0", [t]);
+if (process.argv[1]?.endsWith("cronwise.js")) main("cronwise", "0.1.0", [t]);

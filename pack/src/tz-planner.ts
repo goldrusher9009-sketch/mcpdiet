@@ -2,7 +2,7 @@
 import * as z from "zod/v4";
 import { main, tool } from "../shared/runner.js";
 
-const t = tool({
+export const t = tool({
   name: "meeting_times",
   title: "Find meeting times across time zones",
   description: "Given IANA time zones, list the hours (UTC) that fall inside working hours for everyone.",
@@ -15,4 +15,4 @@ const t = tool({
     return `Shared windows on ${day}:\n` + ok.map((h) => `${String(h).padStart(2, "0")}:00 UTC = ` + zones.map((zn) => `${zn.split("/").pop()} ${String(hourIn(zn, new Date(`${day}T${String(h).padStart(2, "0")}:00:00Z`))).padStart(2, "0")}:00`).join(", ")).join("\n");
   },
 });
-main("tz-planner", "0.1.0", [t]);
+if (process.argv[1]?.endsWith("tz-planner.js")) main("tz-planner", "0.1.0", [t]);
