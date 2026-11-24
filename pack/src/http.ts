@@ -6,6 +6,7 @@ import { t as meeting } from "./tz-planner.js";
 import { t as cron } from "./cronwise.js";
 import { t as prompt } from "./prompt-lint.js";
 import { checkTarget } from "./mcpseal.js";
+import { page as sitePage, robots, sitemap } from "./site.js";
 
 const PKG = /^(@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/;
 const hits = new Map<string, number[]>();
@@ -44,12 +45,35 @@ const handler = createMcpHandler(() => {
   return s;
 });
 
-const page = `<!doctype html><title>mcp-pack</title><body style="font:16px system-ui;max-width:40rem;margin:3rem auto"><h1>mcp-pack hosted MCP</h1><p>Remote MCP endpoint: <code>/mcp</code></p><p>Tools: margin_calc, meeting_times, cron_explain, prompt_lint, mcpseal_check. No login. No data stored.</p>`;
+
+async function contact(req: import("node:http").IncomingMessage, res: import("node:http").ServerResponse) {
+  const ip = String(req.headers["x-forwarded-for"] ?? req.socket.remoteAddress).split(",")[0].trim();
+  const chunks: Buffer[] = [];
+  for await (const c of req) { chunks.push(c as Buffer); if (chunks.reduce((n, b) => n + b.length, 0) > 10_000) { res.writeHead(413).end(); return; } }
+  let b: Record<string, string> = {};
+  try { b = JSON.parse(Buffer.concat(chunks).toString()); } catch { res.writeHead(400).end(); return; }
+  if (b.website) { res.writeHead(200).end("ok"); return; }
+  const name = String(b.name ?? "").slice(0, 100), email = String(b.email ?? "").slice(0, 150), message = String(b.message ?? "").slice(0, 3000);
+  if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !message) { res.writeHead(400).end(); return; }
+  if (limited("c" + ip)) { res.writeHead(429).end(); return; }
+  const key = process.env.RESEND_API_KEY;
+  if (!key) { res.writeHead(503).end(); return; }
+  const esc = (x: string) => x.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]!);
+  const r = await fetch("https://api.resend.com/emails", {
+    method: "POST", headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
+    body: JSON.stringify({ from: process.env.MAIL_FROM ?? "MCP SEAL <contact@mcpseal.dev>", to: [process.env.MAIL_TO ?? "husham@allamericancg.com"], reply_to: email, subject: `MCP SEAL contact: ${name.replace(/[\r\n]/g, " ")}`, html: `<p><b>${esc(name)}</b> (${esc(email)})</p><p>${esc(message).replace(/\n/g, "<br>")}</p>` }),
+  });
+  res.writeHead(r.ok ? 200 : 502).end(r.ok ? "ok" : "failed");
+}
 
 createServer(async (req, res) => {
   try {
     const url = new URL(req.url ?? "/", "http://x");
-    if (url.pathname === "/" || url.pathname === "/health") { res.writeHead(200, { "content-type": "text/html" }).end(page); return; }
+    if (url.pathname === "/health") { res.writeHead(200).end("ok"); return; }
+    if (url.pathname === "/") { res.writeHead(200, { "content-type": "text/html; charset=utf-8" }).end(sitePage); return; }
+    if (url.pathname === "/robots.txt") { res.writeHead(200, { "content-type": "text/plain" }).end(robots); return; }
+    if (url.pathname === "/sitemap.xml") { res.writeHead(200, { "content-type": "application/xml" }).end(sitemap); return; }
+    if (url.pathname === "/contact" && req.method === "POST") { await contact(req, res); return; }
     if (url.pathname !== "/mcp") { res.writeHead(404).end("not found"); return; }
     const ip = String(req.headers["x-forwarded-for"] ?? req.socket.remoteAddress).split(",")[0].trim();
     const chunks: Buffer[] = [];
