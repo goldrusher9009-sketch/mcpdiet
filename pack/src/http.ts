@@ -57,7 +57,11 @@ async function contact(req: import("node:http").IncomingMessage, res: import("no
   if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !message) { res.writeHead(400).end(); return; }
   if (limited("c" + ip)) { res.writeHead(429).end(); return; }
   const key = process.env.RESEND_API_KEY;
-  if (!key) { res.writeHead(503).end(); return; }
+  if (!key) {
+    const to = process.env.MAIL_TO ?? "husham@allamericancg.com";
+    const fr = await fetch(`https://formsubmit.co/ajax/${to}`, { method: "POST", headers: { "content-type": "application/json", accept: "application/json" }, body: JSON.stringify({ name, email, message, _subject: `MCP SEAL contact: ${name.replace(/[\r\n]/g, " ")}`, _replyto: email, _captcha: "false" }) });
+    res.writeHead(fr.ok ? 200 : 502).end(fr.ok ? "ok" : "failed"); return;
+  }
   const esc = (x: string) => x.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]!);
   const r = await fetch("https://api.resend.com/emails", {
     method: "POST", headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
