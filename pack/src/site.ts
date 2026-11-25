@@ -5,7 +5,7 @@ const TITLE = "MCP SEAL: Safety check for MCP servers before you install them";
 const DESC = "MCP SEAL grades any MCP server A to F for supply-chain risk: install scripts, credential access, dynamic code, shell use and hidden network calls. Free CLI, live demo and one-click connect for Claude, ChatGPT, Grok and Perplexity.";
 
 export const robots = `User-agent: *\nAllow: /\nSitemap: ${URL_BASE}/sitemap.xml\n`;
-export const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${URL_BASE}/</loc></url></urlset>`;
+export const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${URL_BASE}/</loc></url><url><loc>${URL_BASE}/docs</loc></url><url><loc>${URL_BASE}/privacy</loc></url></urlset>`;
 
 const ld = JSON.stringify({ "@context": "https://schema.org", "@type": "SoftwareApplication", name: "MCP SEAL", applicationCategory: "DeveloperApplication", operatingSystem: "Any", description: DESC, url: URL_BASE, offers: { "@type": "Offer", price: "0", priceCurrency: "USD" } });
 
@@ -136,3 +136,28 @@ nodes.forEach(m=>{const a=m.userData.a+t*.7;m.position.set(Math.cos(a)*3.1,Math.
 <script>
 f.onsubmit=async e=>{e.preventDefault();s.textContent="Sending...";try{const r=await fetch("/contact",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(f)))});s.textContent=r.ok?"Thanks. We will reply soon.":"Could not send. Please call ${PHONE_DISPLAY}.";if(r.ok)f.reset()}catch{s.textContent="Could not send. Please call ${PHONE_DISPLAY}."}}
 </script></body></html>`;
+
+const shell = (title: string, body: string) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} | MCP SEAL</title><link rel="canonical" href="${URL_BASE}">
+<style>body{margin:0;background:#0f0b0a;color:#f6ece6;font:17px/1.7 system-ui,sans-serif}main{max-width:44rem;margin:0 auto;padding:3rem 1.5rem}a{color:#ff7a4d}h1{letter-spacing:-.02em}h2{margin-top:2rem}code,pre{background:#1d1512;border-radius:6px;padding:.1rem .4rem}pre{padding:1rem;overflow:auto}</style></head><body><main><p><a href="/">&larr; MCP SEAL</a></p>${body}</main></body></html>`;
+
+export const privacy = shell("Privacy policy", `<h1>Privacy policy</h1><p>Last updated: November 24, 2026.</p>
+<h2>What we collect</h2><p>MCP SEAL has no accounts and no sign-in. Tool inputs you send to the server (for example an npm package name, a cron expression or a prompt) are processed to produce a result and are not stored by us.</p>
+<p>Messages sent through the contact form (name, email, message) are forwarded by email to us so we can reply. We do not sell or share them.</p>
+<h2>Technical data</h2><p>Our hosting provider (Railway) may keep standard request logs, such as IP address and time. For rate limiting we hold IP addresses in server memory for up to one hour. We do not use advertising or tracking cookies.</p>
+<h2>Third parties</h2><p>The package check downloads public package files from the npm registry. Contact form messages pass through an email relay service.</p>
+<h2>Your choices</h2><p>To ask us to delete a message you sent, call 929-888-2848 or use the <a href="/#contact">contact form</a>.</p>`);
+
+export const docs = shell("Documentation", `<h1>MCP SEAL documentation</h1>
+<p>MCP SEAL is a remote MCP server with no sign-in. Server URL: <code>${URL_BASE}/mcp</code> (Streamable HTTP).</p>
+<h2>Connect</h2><p>In your AI app, add a custom connector or remote MCP server and paste the URL above.</p>
+<h2>Tools</h2><ul>
+<li><b>mcpseal_check</b> <code>{package}</code>: grades a public npm package A to F for supply-chain risk. Static heuristic. Limit 20 checks per hour per IP.</li>
+<li><b>margin_calc</b> <code>{cost, margin_pct | markup_pct}</code>: converts markup and margin and computes a price.</li>
+<li><b>meeting_times</b> <code>{zones[], start, end, date}</code>: working-hour overlap across IANA time zones.</li>
+<li><b>cron_explain</b> <code>{expression, count}</code>: next run times for a 5-field cron expression.</li>
+<li><b>prompt_lint</b> <code>{prompt}</code>: flags vague wording and missing structure in a prompt.</li></ul>
+<p>All tools are read-only. <code>mcpseal_check</code> contacts the public npm registry; the others do not use the network.</p>
+<h2>Example</h2><pre>mcpseal_check {"package": "@hashshabbir/mcpdiet"}
+Seal: A (90/100)</pre>
+<h2>CLI</h2><p><code>npx -p @hashshabbir/mcp-pack mcpseal @scope/server</code></p>
+<h2>Support</h2><p>Use the <a href="/#contact">contact form</a> or call 929-888-2848.</p>`);
