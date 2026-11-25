@@ -6,7 +6,7 @@ import { t as meeting } from "./tz-planner.js";
 import { t as cron } from "./cronwise.js";
 import { t as prompt } from "./prompt-lint.js";
 import { checkTarget } from "./mcpseal.js";
-import { page as sitePage, robots, sitemap, privacy, docs } from "./site.js";
+import { page as sitePage, robots, sitemap, privacy, docs, terms } from "./site.js";
 
 const PKG = /^(@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/;
 const hits = new Map<string, number[]>();
@@ -76,6 +76,7 @@ createServer(async (req, res) => {
     if (url.pathname === "/health") { res.writeHead(200).end("ok"); return; }
     if (url.pathname === "/") { res.writeHead(200, { "content-type": "text/html; charset=utf-8" }).end(sitePage); return; }
     if (url.pathname === "/privacy") { res.writeHead(200, { "content-type": "text/html; charset=utf-8" }).end(privacy); return; }
+    if (url.pathname === "/terms") { res.writeHead(200, { "content-type": "text/html; charset=utf-8" }).end(terms); return; }
     if (url.pathname === "/docs") { res.writeHead(200, { "content-type": "text/html; charset=utf-8" }).end(docs); return; }
     if (url.pathname === "/robots.txt") { res.writeHead(200, { "content-type": "text/plain" }).end(robots); return; }
     if (url.pathname === "/sitemap.xml") { res.writeHead(200, { "content-type": "application/xml" }).end(sitemap); return; }

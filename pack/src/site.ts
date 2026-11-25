@@ -5,7 +5,7 @@ const TITLE = "MCP SEAL: Safety check for MCP servers before you install them";
 const DESC = "MCP SEAL grades any MCP server A to F for supply-chain risk: install scripts, credential access, dynamic code, shell use and hidden network calls. Free CLI, live demo and one-click connect for Claude, ChatGPT, Grok and Perplexity.";
 
 export const robots = `User-agent: *\nAllow: /\nSitemap: ${URL_BASE}/sitemap.xml\n`;
-export const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${URL_BASE}/</loc></url><url><loc>${URL_BASE}/docs</loc></url><url><loc>${URL_BASE}/privacy</loc></url></urlset>`;
+export const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${URL_BASE}/</loc></url><url><loc>${URL_BASE}/docs</loc></url><url><loc>${URL_BASE}/privacy</loc></url><url><loc>${URL_BASE}/terms</loc></url></urlset>`;
 
 const ld = JSON.stringify({ "@context": "https://schema.org", "@type": "SoftwareApplication", name: "MCP SEAL", applicationCategory: "DeveloperApplication", operatingSystem: "Any", description: DESC, url: URL_BASE, offers: { "@type": "Offer", price: "0", priceCurrency: "USD" } });
 
@@ -161,3 +161,8 @@ export const docs = shell("Documentation", `<h1>MCP SEAL documentation</h1>
 Seal: A (90/100)</pre>
 <h2>CLI</h2><p><code>npx -p @hashshabbir/mcp-pack mcpseal @scope/server</code></p>
 <h2>Support</h2><p>Use the <a href="/#contact">contact form</a> or call 929-888-2848.</p>`);
+
+export const terms = shell("Terms of service", `<h1>Terms of service</h1><p>Last updated: November 24, 2026.</p>
+<p>MCP SEAL is provided free and as is, without warranties. Grades are produced by a static heuristic. They can be wrong and are not a guarantee that any package is safe or unsafe. You are responsible for your own decisions about installing software.</p>
+<p>Do not use the service to attack, overload or abuse it or other systems. We may rate limit or block abusive use and may change or stop the service at any time. To the extent the law allows, we are not liable for losses from using the service.</p>
+<p>Questions: <a href="/#contact">contact form</a> or 929-888-2848. See also our <a href="/privacy">privacy policy</a>.</p>`);
